@@ -43,7 +43,7 @@ jobs:
               SKIP_BUILD="true"
           fi
       fi
-      echo " --> (${LINENO}) SKIP_BUILD=${SKIP_BUILD}"
+      echo " --> (${LINENO}) SKIP_BUILD = ${SKIP_BUILD}"
 
       $(JULIA) -e "using InteractiveUtils; versioninfo()"
 

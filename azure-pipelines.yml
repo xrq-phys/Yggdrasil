@@ -1,6 +1,7 @@
 # Trigger on pushes to `master`
 trigger:
 - master
+- mg/test-commit-message
 
 # Trigger on PRs against `master`
 pr:
@@ -42,6 +43,7 @@ jobs:
               SKIP_BUILD="true"
           fi
       fi
+      echo " --> (${LINENO}) SKIP_BUILD=${SKIP_BUILD}"
 
       $(JULIA) -e "using InteractiveUtils; versioninfo()"
 

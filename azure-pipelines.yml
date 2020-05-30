@@ -39,9 +39,7 @@ jobs:
               SKIP_BUILD="true"
           fi
       else
-          echo -n " --> (${LINENO}) SKIP_BUILD:"
-          echo '${SKIP_BUILD}'
-          if [[ '$(Build.SourceVersionMessage)' == *"${SKIP_BUILD_COOKIE}"* ]]; then
+          if [[ "$(git show -s --format=%B HEAD)" == *"${SKIP_BUILD_COOKIE}"* ]]; then
               SKIP_BUILD="true"
           fi
       fi

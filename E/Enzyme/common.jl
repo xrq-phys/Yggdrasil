@@ -6,7 +6,7 @@ repo = "git@github.com:wsmoses/Enzyme.git"
 version = v"0.0.1"
 
 # Collection of sources required to build attr
-sources = [GitSource(repo, "033574a565eb49a71b18ba935693bc9f8b9113e9")]
+sources = [GitSource(repo, "3cefc5909bc8a777c3545597385355022fcaabda")]
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
@@ -31,6 +31,9 @@ CMAKE_FLAGS+=(-DCMAKE_CROSSCOMPILING:BOOL=ON)
 
 # Tell CMake where LLVM is
 CMAKE_FLAGS+=(-DLLVM_DIR="${prefix}/lib/cmake/llvm")
+
+# Force linking against shared lib
+CMAKE_FLAGS+=(-DLLVM_LINK_LLVM_DYLIB=ON)
 
 # Build the library
 CMAKE_FLAGS+=(-DBUILD_SHARED_LIBS=ON)

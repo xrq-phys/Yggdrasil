@@ -22,11 +22,17 @@ fi
 # enable MD4
 sed "s|//#define MBEDTLS_MD4_C|#define MBEDTLS_MD4_C|" -i include/mbedtls/config.h
 
+FLAGS=()
+if [[ "${proc_family}" != intel ]]; then
+    FLAGS=(-DCMAKE_C_FLAGS="-Wno-type-limits")
+fi
+
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=${prefix} \
     -DCMAKE_TOOLCHAIN_FILE="${CMAKE_TARGET_TOOLCHAIN}" \
     -DCMAKE_C_STANDARD=99 \
     -DUSE_SHARED_MBEDTLS_LIBRARY=On \
+     "${FLAGS[@]}" \
     ..
 make -j${nproc} && make install
 """

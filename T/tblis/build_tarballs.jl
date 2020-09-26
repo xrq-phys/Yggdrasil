@@ -24,8 +24,6 @@ for i in ./Makefile.* ./configure*; do
 done
 
 case ${target} in
-    # Unlike stated in Wiki, 
-    # TBLIS automatically detects threading model.
     *"x86_64"*"linux"*"gnu"*) 
         export BLI_CONFIG=x86
         export BLI_THREAD=openmp
@@ -78,6 +76,23 @@ CFG_OPTION_TBLIS="--enable-config=${BLI_CONFIG} --enable-thread-model=${BLI_THRE
 ./configure ${CFG_OPTION_TBLIS} ${CFG_OPTION_POSIX}
 make -j${nproc}
 make install
+
+# TCI requires additional libatomic.dylib dependency.
+# libatomic.dylib is not available by default in non-GCC OS envs.
+case ${target} in
+    *"x86_64"*"apple"*)
+        LIBATOMIC_NAME=$(otool -l ${prefix}/lib/libtblis.dylib | grep -woh "libatomic.* ")
+        LIBATOMIC_PATH=$(find /opt/${target} -name $LIBATOMIC_NAME)
+        install $LIBATOMIC_PATH ${prefix}/lib/$LIBATOMIC_NAME
+        ;;
+    *"x86_64"*"freebsd"*)
+        LIBATOMIC_NAME=$(readelf -d ${prefix}/lib/libtblis.dylib | grep -woh "libatomic.*")
+        LIBATOMIC_PATH=$(find /opt/${target} -name $LIBATOMIC_NAME)
+        install $LIBATOMIC_PATH ${prefix}/lib/$LIBATOMIC_NAME
+        ;;
+    *)
+        ;;
+esac
 
 # Copy license file
 install_license LICENSE
